@@ -13,6 +13,7 @@ import {
   previewDataset,
   updateRow,
 } from "./controllers/dataset.controller";
+import { queryDataset } from "./controllers/ai.controller";
 
 const app = express();
 app.use(express.json());
@@ -28,6 +29,7 @@ app.get("/api/health", (_req, res) => {
 app.get("/datasets", listDatasets);
 app.get("/datasets/:id/preview", previewDataset);
 app.post("/datasets/:id/rows", addRow);
+app.post("/datasets/:id/query", queryDataset);
 app.patch("/datasets/:id/rows/:rowId", updateRow);
 app.delete("/datasets/:id/rows/:rowId", deleteRow);
 

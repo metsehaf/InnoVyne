@@ -39,3 +39,49 @@ body {
   background: purple;
   color: white;
 }
+
+.data-table {
+  width: 90%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.data-table th {
+  background: #f7f7f7;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.col-filter {
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.data-table .add-row input,
+.data-table td input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.data-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.data-table td .cell {
+  cursor: pointer;
+}

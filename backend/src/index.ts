@@ -6,8 +6,16 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import { fileHanlder } from "./controllers/file-handler.controller";
+import {
+  addRow,
+  deleteRow,
+  listDatasets,
+  previewDataset,
+  updateRow,
+} from "./controllers/dataset.controller";
 
 const app = express();
+app.use(express.json());
 app.use(cors({ credentials: true, origin: "*" }));
 const port = process.env.PORT ? Number(process.env.PORT) : 4000;
 
@@ -17,6 +25,11 @@ app.get("/", (_req, res) => {
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", env: process.env.NODE_ENV ?? "development" });
 });
+app.get("/datasets", listDatasets);
+app.get("/datasets/:id/preview", previewDataset);
+app.post("/datasets/:id/rows", addRow);
+app.patch("/datasets/:id/rows/:rowId", updateRow);
+app.delete("/datasets/:id/rows/:rowId", deleteRow);
 
 const UPLOADS_DIR = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(UPLOADS_DIR)) {

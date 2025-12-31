@@ -1,5 +1,6 @@
 // client/src/App.tsx
 import React, { useEffect, useState } from "react";
+import Aside from "./components/aside-element/aside";
 
 const API = "http://localhost:4000";
 
@@ -302,11 +303,7 @@ export default function App() {
           </table>
         </div>
       )}
-
-      <table>
-        <thead></thead>
-        <tbody></tbody>
-      </table>
+      <Aside datasetId={selected || undefined} />
     </div>
   );
 }

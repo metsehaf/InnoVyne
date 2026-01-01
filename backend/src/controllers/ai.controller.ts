@@ -14,17 +14,27 @@ const safeJSONParse = (text: string) => {
 /**
  * Call Google AI Studio generateText endpoint
  */
+/**
+ * Call Google AI Studio generateContent endpoint (Gemini API 2026)
+ */
 async function callGoogleModel(prompt: string) {
-  const model = process.env.GOOGLE_MODEL ?? "text-bison-001";
+  const model = process.env.GOOGLE_MODEL ?? "gemini-1.5-flash";
   const key = process.env.GOOGLE_API_KEY;
   if (!key) throw new Error("Missing GOOGLE_API_KEY");
-  const url = `https://generativelanguage.googleapis.com/v1beta2/models/${model}:generateText?key=${key}`;
 
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
   const body = {
-    prompt: { text: prompt },
-    temperature: 0,
-    maxOutputTokens: 500,
+    contents: [
+      {
+        parts: [{ text: prompt }],
+      },
+    ],
+    generationConfig: {
+      temperature: 0.1,
+      maxOutputTokens: 800,
+    },
   };
+
   const r = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -37,31 +47,56 @@ async function callGoogleModel(prompt: string) {
   }
 
   const j = await r.json();
-  return j?.candidates?.[0]?.output ?? JSON.stringify(j);
+
+  const output = j?.choices?.[0]?.message?.content;
+
+  if (!output) {
+    throw new Error("Empty response from Google Model");
+  }
+
+  return output;
 }
 
 /**
  * Call Hugging Face Inference API
  */
 async function callHFModel(prompt: string) {
-  const model = process.env.HF_MODEL || "google/flan-t5-large";
-  const res = await fetch(`https://router.huggingface.co/models/${model}`, {
+  const url = "https://router.huggingface.co/v1/chat/completions";
+  const model = process.env.HF_MODEL || "Qwen/Qwen2.5-7B-Instruct:together";
+
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${process.env.HF_API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      inputs: prompt,
-      parameters: { max_new_tokens: 400, temperature: 0.0 },
+      model: model,
+      messages: [
+        { role: "system", content: "You are a data assistant." },
+        { role: "user", content: prompt },
+      ],
+      max_tokens: 500,
+      temperature: 0.1,
     }),
   });
-  const data = await res.json();
-  // parse generated_text or appropriate field depending on model
-  return (
-    data?.generated_text ??
-    (Array.isArray(data) ? data[0]?.generated_text : JSON.stringify(data))
-  );
+
+  const text = await res.text();
+
+  if (!res.ok) {
+    throw new Error(`HF API error ${res.status}: ${text}`);
+  }
+
+  // HF can return:
+  // 1) { generated_text: "..." }
+  // 2) [{ generated_text: "..." }]
+  const data = safeJSONParse(text);
+
+  if (Array.isArray(data)) {
+    return data[0]?.generated_text ?? text;
+  }
+
+  return data?.generated_text ?? text;
 }
 
 /**

@@ -54,6 +54,7 @@ export default function Aside({
       if (!resp.ok) throw new Error(body.error || "AI provider error");
 
       const content = body.answer ?? body.raw ?? "No answer";
+      console.log(content);
       setAnswer(content);
       if (onAnswer) onAnswer(body);
     } catch (err: any) {
@@ -110,13 +111,9 @@ export default function Aside({
           {isLoading && <div className="ai-loading">Loading…</div>}
           {error && <div className="ai-error">Error: {error}</div>}
           {answer && (
-            <div className="ai-answer">
-              {typeof answer === "object" ? (
-                <pre>{JSON.stringify(answer, null, 2)}</pre>
-              ) : (
-                <pre>{String(answer)}</pre>
-              )}
-            </div>
+            <p style={{ whiteSpace: "pre-wrap" }}>
+              {answer.choices[0].message.content}
+            </p>
           )}
         </div>
       </div>

@@ -1,5 +1,7 @@
 # AI-Enhanced Data Module
 
+![Project Header Image](https://raw.githubusercontent.com/your-username/your-repo/main/public/screenshot.png)
+
 ## Project Overview
 
 This project is a full-stack web application designed to bridge the gap between raw data and actionable insights. Users can upload structured data and interact with it through an AI-driven interface.

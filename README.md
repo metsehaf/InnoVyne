@@ -1,6 +1,6 @@
 # AI-Enhanced Data Module
 
-![Project Header Image](https://raw.githubusercontent.com/your-username/your-repo/main/public/screenshot.png)
+![Screenshot of the application running locally](images/app-screenshot.png)
 
 ## Project Overview
 
@@ -24,13 +24,13 @@ The application follows a standard **Client-Server-Database** pattern, with a sp
 
 ## Technologies Used
 
-| Area               | Technology                   | Key Packages                       |
-| :----------------- | :--------------------------- | :--------------------------------- |
-| **Frontend**       | React, TypeScript            | `react`, `react-dom`               |
-| **Backend**        | Node.js, Express, TypeScript | `express`, `cors`, `multer`        |
-| **Database**       | PostgreSQL, Sequelize        | `pg`, `sequelize`, `sequelize-cli` |
-| **Data Handling**  | CSV Processing               | `csv-parser`, `uuid`               |
-| **AI Integration** | Google Gemini / Hugging Face | `dotenv`, `node-fetch`             |
+| Area               | Technology                   | Key Packages                   |
+| :----------------- | :--------------------------- | :----------------------------- |
+| **Frontend**       | React, TypeScript            | `react`, `react-dom`           |
+| **Backend**        | Node.js, Express, TypeScript | `express`, `cors`, `multer`    |
+| **Database**       | PostgreSQL, Sequelize        | `pg`, `pg-hstore`, `sequelize` |
+| **Data Handling**  | CSV Processing               | `csv-parser`, `uuid`           |
+| **AI Integration** | Google Gemini / Hugging Face | `dotenv`, `node-fetch`         |
 
 ---
 
@@ -51,13 +51,13 @@ The application follows a standard **Client-Server-Database** pattern, with a sp
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://your-repo-link.git](https://your-repo-link.git)
-cd ai-data-module
+git clone [https://github.com/metsehaf/InnoVyne.git](https://github.com/metsehaf/InnoVyne.git)
+cd InnoVyne
 ```
 
 ### 2. Install Dependencies
 
-Install dependencies for both frontend and backend. (If separated into /client and /server, run this in both folders):
+Install dependencies for both frontend and backend from the root folder.
 
 ```bash
 npm install
@@ -71,11 +71,7 @@ Code snippet
 
 # Database Configuration
 
-DB_NAME=ai_data_db
-DB_USER=postgres
-DB_PASS=your_database_password
-DB_HOST=localhost
-DB_PORT=5432
+DATABASE_URL=postgresql://me:your_database_password@localhost:5432/api
 
 # AI Configuration (Choose ONE provider)
 
@@ -87,11 +83,9 @@ GOOGLE_MODEL=gemini-3-flash
 
 # --- OR Hugging Face ---
 
-# AI_PROVIDER=huggingface
-
-# HF_API_KEY=YOUR_HF_TOKEN
-
-# HF_MODEL=google/gemma-2-2b-it
+AI_PROVIDER=huggingface
+HF_API_KEY=YOUR_HF_TOKEN
+HF_MODEL=google/gemma-2-2b-it
 
 ### 4. Run Database Migrations
 
@@ -106,7 +100,7 @@ npx sequelize-cli db:migrate
 Run the development environment:
 
 ```bash
-npm run dev
+npm run start
 ```
 
 ### 6. Access the Application
@@ -118,4 +112,4 @@ Upload: Select a .csv file via the upload dashboard.
 
 Review: Ensure the data loads correctly in the interactive table.
 
-Analyze: Use the chat sidebar to ask questions like "What is the average value in column X?" or "Summarize the trends in this data."
+Analyze: Use the chat sidebar to ask questions like "How many companies have been contacted in deal stage so far?" or "Summarize the trends in this data."
